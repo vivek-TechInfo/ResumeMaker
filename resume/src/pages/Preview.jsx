@@ -1,0 +1,69 @@
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { dummyResumeData } from '../assets/assets'
+import ResumePreview from '../components/ResumePreview'
+import Loader from '../components/Loader'
+import { ArrowLeftIcon } from 'lucide-react'
+import api from '../configs/api'
+import { useSelector } from 'react-redux'
+import toast from 'react-hot-toast'
+
+const Preview = () => {
+
+  const {resumeId} =  useParams()
+  const [isLoading , setResumeLoading] = useState(true)
+  
+
+  const [resumeData , setResumeData] = useState(null)
+
+  const loadResume = async()=>{
+        try {
+
+            const {data} = await api.get("/api/resumes/public/"+resumeId)
+
+            console.log(data);
+            
+
+            setResumeData(data.resume)
+
+            
+        } catch (error) {
+            toast.error(error?.response?.data?.message || error.message)
+
+            
+        }finally{
+          setResumeLoading(false)
+        }
+  }
+
+
+  useEffect(()=>{
+    loadResume()
+  },[])
+
+  return resumeData ? (
+    <div className='bg-slate-100'>
+      <div className='max-w-3xl mx-auto py-10'  >
+        <ResumePreview data={resumeData} template={resumeData.template} accentColor={resumeData.accentColor} classes='py-4 bg-white' />
+
+      </div>
+
+    </div>
+  ):(
+    <div>
+      {
+        isLoading ? <Loader/> : (
+        <div className='flex flex-col items-center justify-center h-screen'>
+          <p className='text-center text-6xl text-slate-400 font-medium'>Resume not found</p>
+          <a className='mt-6 bg-green-500 hover:bg-green-600 text-white rounded-full px-6 h-9 ring-offset-1 ring-1 ring-green-400 flex items-center transition-colors ' href="/">
+            <ArrowLeftIcon className='mr-2 size-4'  />
+            go to home page
+          </a>
+        </div>)
+      }
+    </div>
+
+  )
+}
+
+export default Preview

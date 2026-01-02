@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+*{
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+}
+
+
+/* @layer base kya hota hai?
+base = global / default styles
+HTML tags (button, body, h1, p, etc.) ke liye use hota hai */
+@layer base {
+  button{
+    @apply cursor-pointer;
+    
+  }
+
+  input:not([type="checkbox"]){
+    @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg
+  }
+  textarea{
+    @apply outline-none focus:ring border border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-lg resize-none
+  }
+}
+
